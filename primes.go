@@ -52,14 +52,12 @@ func IsPrime(num int64) bool {
 // Return an int64 slice of the prime factorization of a number >= 2.
 // The prime factorization is sorted, and its product is the original number.
 func PrimeFactorize(num int64) []int64 {
-	var p int64
+	var p int64 = 1
 	factors := make([]int64, 0)
-	primechan := make(chan int64)
-	go LazyPrimes(num, primechan)
 	// number will equal one at the end
 	for num != 1 {
 		// note: guarantees that smallest prime factors appear first
-		for p = <-primechan; num%p == 0; num /= p {
+		for p++; num%p == 0; num /= p {
 			factors = append(factors, p)
 		}
 	}
@@ -69,13 +67,11 @@ func PrimeFactorize(num int64) []int64 {
 // Return an int64 slice of the unique prime factors of a number >= 2.
 // The factors in the slice are sorted in increasing order.
 func UniquePrimeFactors(num int64) []int64 {
-	var p int64
+	var p int64 = 1
 	factors := make([]int64, 0)
-	primechan := make(chan int64)
-	go LazyPrimes(num, primechan)
 	// stop when the number equals one
 	for num != 1 {
-		if p = <-primechan; num%p == 0 {
+		if p++; num%p == 0 {
 			// only append this once
 			factors = append(factors, p)
 			// keep dividing by this factor while it's divisible
